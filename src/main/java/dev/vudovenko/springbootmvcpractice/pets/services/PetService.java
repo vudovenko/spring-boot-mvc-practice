@@ -14,12 +14,9 @@ public class PetService {
     private Long idCounter;
     private final Map<Long, Pet> pets;
 
-    private final UserService userService;
-
     public PetService(UserService userService) {
         this.idCounter = 0L;
         this.pets = new HashMap<>();
-        this.userService = userService;
     }
 
     private Long getNextId() {
@@ -53,11 +50,11 @@ public class PetService {
         return petToUpdate;
     }
 
-    public Boolean checkIfPetExists(Long id) {
-        return pets.containsKey(id);
-    }
-
     public void deletePet(Long id) {
         pets.remove(id);
+    }
+
+    public Boolean checkIfPetExists(Long id) {
+        return pets.containsKey(id);
     }
 }

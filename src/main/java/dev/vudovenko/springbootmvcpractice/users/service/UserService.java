@@ -39,10 +39,6 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + id + " not found"));
     }
 
-    public Boolean checkIfUserExists(Long id) {
-        return users.containsKey(id);
-    }
-
     public User updateUser(Long id, User user) {
         if (!checkIfUserExists(id)) {
             throw new IllegalArgumentException("User with id " + id + " not found");
@@ -56,5 +52,9 @@ public class UserService {
 
     public void deleteUser(Long id) {
         users.remove(id);
+    }
+
+    public Boolean checkIfUserExists(Long id) {
+        return users.containsKey(id);
     }
 }

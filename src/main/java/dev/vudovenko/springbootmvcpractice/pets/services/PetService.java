@@ -30,7 +30,7 @@ public class PetService extends IDManager {
 
     public Pet createPet(@Valid Pet pet) {
         if (!userService.checkIfUserExists(pet.getUserId())) {
-            throw new UserNotFoundException("Owner with id " + pet.getUserId() + " not found");
+            throw new UserNotFoundException("Owner with %d not found".formatted(pet.getUserId()));
         }
 
         pet.setId(getNextId());
@@ -43,7 +43,7 @@ public class PetService extends IDManager {
 
     public Pet getPetById(Long id) {
         return Optional.ofNullable(pets.get(id))
-                .orElseThrow(() -> new PetNotFoundException("Pet with id " + id + " not found"));
+                .orElseThrow(() -> new PetNotFoundException("Pet with %d not found".formatted(id)));
     }
 
     public Pet updatePet(Long petId, @Valid Pet petToUpdate) {
@@ -53,7 +53,7 @@ public class PetService extends IDManager {
 
         Long newOwnerId = petToUpdate.getUserId();
         if (!userService.checkIfUserExists(newOwnerId)) {
-            throw new UserNotFoundException("Owner with id " + newOwnerId + " not found");
+            throw new UserNotFoundException("Owner with %d not found".formatted(newOwnerId));
         }
         userService.addPetToUser(newOwnerId, oldPet);
 

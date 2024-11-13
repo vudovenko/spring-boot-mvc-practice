@@ -37,7 +37,7 @@ public class UserService extends IDManager {
 
     public User getById(Long id) {
         return Optional.ofNullable(users.get(id))
-                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
+                .orElseThrow(() -> new UserNotFoundException("User with %d not found".formatted(id)));
     }
 
     public User updateUser(Long id, @Valid User user) {

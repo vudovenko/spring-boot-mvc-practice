@@ -13,6 +13,6 @@ public class EmptyListValidator implements ConstraintValidator<EmptyList, Collec
 
     @Override
     public boolean isValid(Collection<?> collection, ConstraintValidatorContext context) {
-        return collection != null && collection.isEmpty();
+        return collection == null || collection.isEmpty();
     }
 }

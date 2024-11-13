@@ -1,6 +1,5 @@
 package dev.vudovenko.springbootmvcpractice.users.model;
 
-import dev.vudovenko.springbootmvcpractice.exceptionHandling.validator.EmptyList;
 import dev.vudovenko.springbootmvcpractice.pets.model.Pet;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -34,6 +33,5 @@ public class User {
     private Integer age;
 
     @Valid
-    @EmptyList
     private List<Pet> pets;
 }

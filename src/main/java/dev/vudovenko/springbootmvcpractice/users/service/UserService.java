@@ -1,5 +1,6 @@
 package dev.vudovenko.springbootmvcpractice.users.service;
 
+import dev.vudovenko.springbootmvcpractice.exceptionHandling.exceptions.UserNotFoundException;
 import dev.vudovenko.springbootmvcpractice.managingID.IDManager;
 import dev.vudovenko.springbootmvcpractice.pets.model.Pet;
 import dev.vudovenko.springbootmvcpractice.pets.services.PetService;
@@ -8,7 +9,10 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Validated
 @Service
@@ -24,11 +28,6 @@ public class UserService extends IDManager {
     }
 
     public User createUser(@Valid User user) {
-        if (user.getPets() != null && !user.getPets().isEmpty()) {
-            // todo заменить на UserCreationException
-            throw new IllegalArgumentException("Pets should be null");
-        }
-
         user.setId(getNextId());
         user.setPets(new ArrayList<>());
         users.put(user.getId(), user);
@@ -37,9 +36,8 @@ public class UserService extends IDManager {
     }
 
     public User getById(Long id) {
-        // todo заменить на UserNotFoundException
         return Optional.ofNullable(users.get(id))
-                .orElseThrow(() -> new IllegalArgumentException("User with id " + id + " not found"));
+                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
     }
 
     public User updateUser(Long id, @Valid User user) {

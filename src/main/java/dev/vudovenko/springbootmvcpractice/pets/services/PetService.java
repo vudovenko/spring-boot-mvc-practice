@@ -1,5 +1,7 @@
 package dev.vudovenko.springbootmvcpractice.pets.services;
 
+import dev.vudovenko.springbootmvcpractice.exceptionHandling.exceptions.PetNotFoundException;
+import dev.vudovenko.springbootmvcpractice.exceptionHandling.exceptions.UserNotFoundException;
 import dev.vudovenko.springbootmvcpractice.managingID.IDManager;
 import dev.vudovenko.springbootmvcpractice.pets.model.Pet;
 import dev.vudovenko.springbootmvcpractice.users.model.User;
@@ -28,8 +30,7 @@ public class PetService extends IDManager {
 
     public Pet createPet(@Valid Pet pet) {
         if (!userService.checkIfUserExists(pet.getUserId())) {
-            // todo заменить на UserNotFoundException
-            throw new IllegalArgumentException("Owner with id " + pet.getUserId() + " not found");
+            throw new UserNotFoundException("Owner with id " + pet.getUserId() + " not found");
         }
 
         pet.setId(getNextId());
@@ -41,9 +42,8 @@ public class PetService extends IDManager {
     }
 
     public Pet getPetById(Long id) {
-        // todo заменить на PetNotFoundException
         return Optional.ofNullable(pets.get(id))
-                .orElseThrow(() -> new IllegalArgumentException("Pet with id " + id + " not found"));
+                .orElseThrow(() -> new PetNotFoundException("Pet with id " + id + " not found"));
     }
 
     public Pet updatePet(Long petId, @Valid Pet petToUpdate) {
@@ -53,8 +53,7 @@ public class PetService extends IDManager {
 
         Long newOwnerId = petToUpdate.getUserId();
         if (!userService.checkIfUserExists(newOwnerId)) {
-            // todo заменить на UserNotFoundException
-            throw new IllegalArgumentException("Owner with id " + newOwnerId + " not found");
+            throw new UserNotFoundException("Owner with id " + newOwnerId + " not found");
         }
         userService.addPetToUser(newOwnerId, oldPet);
 

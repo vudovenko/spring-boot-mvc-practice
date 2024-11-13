@@ -2,6 +2,7 @@ package dev.vudovenko.springbootmvcpractice.users.controllers;
 
 import dev.vudovenko.springbootmvcpractice.users.model.User;
 import dev.vudovenko.springbootmvcpractice.users.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         log.info("Create user: {}", user);
         User createdUser = userService.createUser(user);
 
@@ -36,7 +37,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(
             @PathVariable Long id,
-            @RequestBody User user
+            @Valid @RequestBody User user
     ) {
         log.info("Update user with id: {}, user: {}", id, user);
         User updatedUser = userService.updateUser(id, user);

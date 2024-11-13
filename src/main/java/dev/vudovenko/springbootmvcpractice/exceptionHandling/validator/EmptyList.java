@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = EmptyListValidator.class)
 public @interface EmptyList {
 
-    String message() default "The pets list must be null or empty upon user creation";
+    String message() default "Список питомцев должен быть пустым или равен null";
 
     Class<?>[] groups() default {};
 

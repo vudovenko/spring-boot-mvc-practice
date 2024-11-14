@@ -65,6 +65,10 @@ public class PetService extends IDManager {
         pets.remove(id);
     }
 
+    public Boolean checkIfPetExists(Long id) {
+        return pets.containsKey(id);
+    }
+
     public void removePetFromOwner(Long petId) {
         Pet pet = getPetById(petId);
         User oldOwner = userService.getById(pet.getUserId());

@@ -306,6 +306,59 @@ class PetControllerTest {
     }
 
     @Test
+    void shouldNotUpdatePetWhenNewOwnerNotExists() throws Exception {
+        Pet createdPet = petService.createPet(
+                new Pet(
+                        null,
+                        "Original pet name",
+                        owner.getId()
+                )
+        );
+        // объекты хранятся в памяти приложения, поэтому необходимо создать копию
+        Pet originalPetCopy = new Pet(
+                createdPet.getId(),
+                createdPet.getName(),
+                createdPet.getUserId()
+        );
+
+        Long nonExistentUserId = Long.MAX_VALUE;
+
+        Pet petToUpdate = new Pet(
+                null,
+                "Updated pet name",
+                nonExistentUserId
+        );
+
+        String petToUpdateJson = objectMapper.writeValueAsString(petToUpdate);
+
+        String errorMessageResponseJson = mockMvc
+                .perform(
+                        put("/pets/{id}", createdPet.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(petToUpdateJson)
+                )
+                .andExpect(status().isNotFound())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        ErrorMessageResponse errorMessageResponse = objectMapper
+                .readValue(errorMessageResponseJson, ErrorMessageResponse.class);
+
+        Assertions.assertEquals(errorMessageResponse.message(), "Entity not found");
+        Assertions.assertTrue(errorMessageResponse.detailedMessage()
+                .contains("Owner with %d not found".formatted(nonExistentUserId)));
+        Assertions.assertNotNull(errorMessageResponse.dateTime());
+
+        Pet notUpdatedPet = petService.getPetById(createdPet.getId());
+
+        org.assertj.core.api.Assertions
+                .assertThat(notUpdatedPet)
+                .usingRecursiveComparison()
+                .isEqualTo(originalPetCopy);
+    }
+
+    @Test
     void shouldFindPetById() throws Exception {
         Pet createdPet = petService.createPet(
                 new Pet(

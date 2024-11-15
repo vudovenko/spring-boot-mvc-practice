@@ -47,14 +47,14 @@ public class PetService extends IDManager {
     }
 
     public Pet updatePet(Long petId, @Valid Pet petToUpdate) {
-        Pet oldPet = getPetById(petId);
-        oldPet.setName(petToUpdate.getName());
-        removePetFromOwner(petId);
-
         Long newOwnerId = petToUpdate.getUserId();
         if (!userService.checkIfUserExists(newOwnerId)) {
             throw new UserNotFoundException("Owner with %d not found".formatted(newOwnerId));
         }
+
+        Pet oldPet = getPetById(petId);
+        oldPet.setName(petToUpdate.getName());
+        removePetFromOwner(petId);
         userService.addPetToUser(newOwnerId, oldPet);
 
         return oldPet;

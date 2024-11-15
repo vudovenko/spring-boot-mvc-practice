@@ -18,7 +18,6 @@ public class User {
     @Null
     private Long id;
 
-    @NotNull
     @NotBlank
     @Size(min = 3, max = 50)
     private String name;
